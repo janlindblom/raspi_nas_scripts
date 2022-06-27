@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2017 Tony DiCola for Adafruit Industries
 # SPDX-FileCopyrightText: 2017 James DeVito for Adafruit Industries
 # SPDX-FileCopyrightText: 2022 Jan Lindblom for Namnløs
+#
 # SPDX-License-Identifier: MIT
 
 import sys
@@ -15,7 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 i2c = board.I2C()
 
 # Create the SSD1306 OLED class.
-disp = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c, addr=0x3c)
+disp = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c, addr=0x3C)
 
 # Clear display.
 disp.fill(0)
@@ -37,21 +38,34 @@ padding = -2
 top = padding
 bottom = height - padding
 # Move left to right keeping track of the current x position for drawing shapes.
-x = 0
+left = 0
 
-#font = ImageFont.load_default()
-#font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 9)
-font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf', 9)
+# font = ImageFont.load_default()
+# font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 9)
+font = ImageFont.truetype("/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf", 9)
+
 
 def cleanup(sig, frame):
-    sys.exit(sig)
+    sys.exit(0)
+
 
 # Draws a 'progress bar' style horisontal meter.
 def drawPBar(start, val):
     draw.rectangle((0, top + start, width - 1, top + start + 7), outline=1, fill=0)
-    draw.rectangle((1, top + start + 1, (val / 100) * (width - 2), top + start + 6), outline=0, fill=1)
+    draw.rectangle(
+        (1, top + start + 1, (val / 100) * (width - 2), top + start + 6),
+        outline=0,
+        fill=1,
+    )
 
-for sig in [signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGQUIT]:
+
+for sig in [
+    signal.SIGTERM,
+    signal.SIGINT,
+    signal.SIGHUP,
+    signal.SIGQUIT,
+    signal.SIGKILL,
+]:
     signal.signal(sig, cleanup)
 
 while True:
@@ -69,13 +83,13 @@ while True:
     cmd = "vcgencmd measure_temp |cut -f 2 -d '='"
     Temp = subprocess.check_output(cmd, shell=True).decode("utf-8")
 
-    draw.text((x, top + 0), "IP: " + IP, font=font, fill=128)
-    draw.text((x, top + 9), "CPU load: " + CPU, font=font, fill=255)
+    draw.text((left, top + 0), "IP: " + IP, font=font, fill=128)
+    draw.text((left, top + 9), "CPU load: " + CPU, font=font, fill=255)
     drawPBar(20, int(float(CPU) * 100))
-    draw.text((x, top + 27), MemUsage, font=font, fill=255)
+    draw.text((left, top + 27), MemUsage, font=font, fill=255)
     drawPBar(37, int(MemPercentage))
-    draw.text((x, top + 45), Disk, font=font, fill=255)
-    draw.text((x, top + 54), "Temp: " + Temp, font=font, fill=255)
+    draw.text((left, top + 45), Disk, font=font, fill=255)
+    draw.text((left, top + 54), "Temp: " + Temp, font=font, fill=255)
 
     disp.image(image)
     disp.show()
