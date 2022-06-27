@@ -1,0 +1,5 @@
+Pillow
+Adafruit-Blinka
+adafruit-circuitpython-framebuf
+adafruit-circuitpython-ssd1306
+
