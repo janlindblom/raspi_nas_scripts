@@ -5,6 +5,7 @@
         "ms-python.vscode-pylance",
         "ms-python.python",
         "coolbear.systemd-unit-file",
-        "hangxingliu.vscode-systemd-support"
+        "hangxingliu.vscode-systemd-support",
+        "ultram4rine.vscode-choosealicense"
     ]
 }

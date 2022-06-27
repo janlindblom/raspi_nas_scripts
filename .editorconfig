@@ -13,3 +13,7 @@ insert_final_newline = true
 [*.py]
 indent_style = unset
 indent_size = unset
+
+[/.vscode/*.json]
+insert_final_newline = false
+trim_trailing_whitespace = false
