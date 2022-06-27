@@ -3,7 +3,9 @@
 # SPDX-FileCopyrightText: 2022 Jan Lindblom for Namnløs
 # SPDX-License-Identifier: MIT
 
+import sys
 import time
+import signal
 import subprocess
 import board
 import adafruit_ssd1306
@@ -38,14 +40,19 @@ bottom = height - padding
 x = 0
 
 #font = ImageFont.load_default()
-font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 9)
-#font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf', 9)
-#font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf', 9)
+#font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 9)
+font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf', 9)
+
+def cleanup(sig, frame):
+    sys.exit(sig)
 
 # Draws a 'progress bar' style horisontal meter.
 def drawPBar(start, val):
     draw.rectangle((0, top + start, width - 1, top + start + 7), outline=1, fill=0)
     draw.rectangle((1, top + start + 1, (val / 100) * (width - 2), top + start + 6), outline=0, fill=1)
+
+for sig in [signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGQUIT]:
+    signal.signal(sig, cleanup)
 
 while True:
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
@@ -73,4 +80,3 @@ while True:
     disp.image(image)
     disp.show()
     time.sleep(1)
-

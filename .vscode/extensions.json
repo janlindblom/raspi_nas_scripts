@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "editorconfig.editorconfig",
+        "ms-python.black-formatter",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "coolbear.systemd-unit-file",
+        "hangxingliu.vscode-systemd-support"
+    ]
+}

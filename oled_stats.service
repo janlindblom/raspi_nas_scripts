@@ -1,0 +1,13 @@
+[Unit]
+Description=OLED stats service
+After=multi-user.target
+
+[Service]
+Type=simple
+User=jan
+Group=jan
+Restart=on-failure
+ExecStart=/usr/bin/python3 /home/jan/pinas/oled_stats.py
+
+[Install]
+WantedBy=multi-user.target
